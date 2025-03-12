@@ -20,12 +20,12 @@ class BoardManager(private val country: String, private var laps: Int = 0, priva
         }
 
         val mexicoSectors = listOf(
-            Sector(1, 22, 7, 9, 14),
-            Sector(2, 4, 7, 4),
-            Sector(3, 18, 6, 8),
-            Sector(4, 5, 4, 5),
-            Sector(5, 5, 2, 4),
-            Sector(6, 0, 2, 0),
+            Sector(order = 1, length = 22, cornerSpeed = 7, brakingArea = 9, start = 14),
+            Sector(order = 2, length = 4, cornerSpeed = 7, brakingArea = 4),
+            Sector(order = 3, length = 18, cornerSpeed = 6, brakingArea = 8),
+            Sector(order = 4, length = 5, cornerSpeed = 4, brakingArea = 5),
+            Sector(order = 5, length = 5, cornerSpeed = 2, brakingArea = 4),
+            Sector(order = 6, length = 0, cornerSpeed = 2, brakingArea = 0),
         )
         Board("Mexico", laps, 60, mexicoSectors)
     }

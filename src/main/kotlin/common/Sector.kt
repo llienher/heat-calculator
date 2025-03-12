@@ -8,20 +8,19 @@ class Sector(
     start: Int? = null
 ) {
     private val spaces = length + 1
-    private val spots: Int = spaces * 2
+    private val spots: Int = Utils.fromSpaceToSpot(spaces)
     private val speed = cornerSpeed // only for display
-    private var legendSpots = (brakingArea + 1) * 2
+    private val legendSpots = Utils.fromSpaceToSpot((brakingArea + 1))
+    private val straightSpots: Int = spots - legendSpots;
     private var startSpot: Int? = null;
     private var finishSpot: Int? = null;
     private var spotsToCorner: Int? = null;
-    private var spotsInStraight: Int = 0;
 
     init {
         if (start !== null) {
-            startSpot = start * 2
-            finishSpot = (start * 2) - 1
+            startSpot = Utils.fromSpotToSpace(start)
+            finishSpot = Utils.fromSpotToSpace(start) - 1
             spotsToCorner = spots - startSpot!!;
-            spotsInStraight = spots - legendSpots
         }
     }
 
@@ -29,7 +28,7 @@ class Sector(
         return this.order;
     }
 
-    fun getSpots(): Int {
+    fun getSpotsNumber(): Int {
         return this.spots;
     }
 
@@ -37,7 +36,7 @@ class Sector(
         return this.speed
     }
 
-    fun getLegendSpots(): Int {
+    fun getLegendLength(): Int {
         return this.legendSpots;
     }
 
@@ -54,6 +53,10 @@ class Sector(
     }
 
     fun getStraightLength(): Int {
-        return this.spotsInStraight
+        return this.straightSpots
+    }
+
+    fun isChicane(): Boolean {
+        return this.straightSpots == 0;
     }
 }
