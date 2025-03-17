@@ -27,6 +27,7 @@ class BoardManager(private val country: String, private var laps: Int = 0, priva
             Sector(order = 5, length = 5, cornerSpeed = 2, brakingArea = 4),
             Sector(order = 6, length = 0, cornerSpeed = 2, brakingArea = 0),
         )
-        Board("Mexico", laps, 60, mexicoSectors)
+        val board = Board("Mexico", laps, 60, mexicoSectors)
+        board.initTrack()
     }
 }

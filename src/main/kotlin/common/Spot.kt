@@ -1,6 +1,6 @@
 package common
 
-class Spot (
+data class Spot (
     var numSector: Int = -1,
     var type: SpotType = SpotType.LEGEND,
     var boardPosition: Int = -1,

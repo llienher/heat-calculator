@@ -26,7 +26,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
         return this.track
     }
 
-    private fun initTrack() {
+    fun initTrack() {
         var spotInitiated = 0
         for ((index, sector) in sectors.withIndex()) {
             // TODO: logic sector 1
