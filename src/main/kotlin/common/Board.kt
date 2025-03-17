@@ -5,7 +5,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
     private val totalLap = laps
     private val totalSpaces = spaces
     private val totalSpots = Utils.fromSpaceToSpot(totalSpaces)
-    private val track = MutableList(totalSpots) { Spot(-1 ) }
+    private val track = MutableList(totalSpots) { Spot() }
 
     init {
         println("Starting the Grand Prix of $title, for $totalLap laps of $totalSpaces spaces !")
@@ -41,7 +41,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
 
      fun assignSpots(sector: Sector, spotCount: Int): Int {
         var index = spotCount
-        val straightToSet = sector.getStraightLength()
+        val straightToSet = index + sector.getStraightLength()
         val max = index + sector.getSpotsNumber()
 
         // Assign spot until end of the sector
@@ -49,6 +49,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
             val spot = this.track[index]
             spot.numSector = sector.getOrder()
             spot.type = if (index < straightToSet) SpotType.STRAIGHT else SpotType.LEGEND
+            spot.boardPosition = index
             index++
         }
 
