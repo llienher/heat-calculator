@@ -1,6 +1,6 @@
 package common
 
-enum class PlayerType { PLAYER, AI }
+enum class PlayerType { USER, AI }
 
 enum class PlayerColor { RED, YELLOW, GREEN, BLUE, BLACK, GREY, ORANGE, VIOLET }
 

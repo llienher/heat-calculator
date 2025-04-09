@@ -8,9 +8,9 @@ class Sector(
     start: Int? = null
 ) {
     private val spaces = length + 1
-    private val spots: Int = Utils.fromSpaceToSpot(spaces)
+    private val spots: Int = Utils.fromNumberToSpot(spaces)
     private val speed = cornerSpeed // only for display
-    private val legendSpots = Utils.fromSpaceToSpot((brakingArea + 1))
+    private val legendSpots = Utils.fromNumberToSpot((brakingArea + 1))
     private val straightSpots: Int = spots - legendSpots;
     private var startSpot: Int? = null;
     private var finishSpot: Int? = null;
@@ -18,8 +18,8 @@ class Sector(
 
     init {
         if (start !== null) {
-            startSpot = Utils.fromSpotToSpace(start)
-            finishSpot = Utils.fromSpotToSpace(start) - 1
+            startSpot = Utils.fromNumberToSpace(start)
+            finishSpot = Utils.fromNumberToSpace(start) - 1
             spotsToCorner = spots - startSpot!!;
         }
     }

@@ -4,7 +4,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
     private val title = name.uppercase()
     private val totalLap = laps
     private val totalSpaces = spaces
-    private val totalSpots = Utils.fromSpaceToSpot(totalSpaces)
+    private val totalSpots = Utils.fromNumberToSpot(totalSpaces)
     private val track = MutableList(totalSpots) { Spot() }
 
     init {
@@ -39,7 +39,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
         }
     }
 
-     fun assignSpots(sector: Sector, spotCount: Int): Int {
+    fun assignSpots(sector: Sector, spotCount: Int): Int {
         var index = spotCount
         val straightToSet = index + sector.getStraightLength()
         val max = index + sector.getSpotsNumber()
@@ -56,18 +56,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
         return max
     }
 
-    fun getTrackPosition(player: Player?): Any {
-        if (player != null) {
-            for (spot in track) {
-                val rank = 1
-                if (spot.player != null) {
-                    if (spot.player == player) {
-                        println("Player is ranked $rank")
-                    }
-                    rank + 1
-                }
-            }
-        }
+    fun getPlayersRanking(): MutableList<Player> {
         val ranking = mutableListOf<Player>()
         for (spot in track) {
             if (spot.player != null) {
@@ -75,5 +64,49 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
             }
         }
         return ranking
+    }
+
+    fun getPlayerRanking(player: Player): Int {
+        val rank = 1
+        for (spot in track) {
+            if (spot.player != null) {
+                if (spot.player == player) {
+                    println("Player is ranked $rank")
+                    break
+                }
+                rank + 1
+            }
+        }
+        return rank
+    }
+
+    fun setPlayerStartingPosition(player: Player, startingPosition: Int) {
+        player.position = startingPosition
+    }
+
+    fun movePlayerOnTrack(player: Player, move: Int) {
+        val position = positionNearRaceLine(player.position)
+        val newPosition = position + Utils.fromNumberToSpot(move)
+        addPlayerToSpot(player, newPosition)
+    }
+
+    // Odd numbers are near race line, even numbers are off race line
+    private fun positionNearRaceLine(position: Int): Int {
+        val modulo = position % 2
+        return if (modulo == 0) {
+            position + 1
+        } else {
+            position
+        }
+    }
+
+    private fun addPlayerToSpot(player: Player, newPosition: Int) {
+        val spot = track[newPosition]
+        if (!spot.isOccupied()) {
+            spot.player = player
+        } else {
+            println("Spot occupied, move to nearest available")
+            addPlayerToSpot(player, newPosition - 1)
+        }
     }
 }
