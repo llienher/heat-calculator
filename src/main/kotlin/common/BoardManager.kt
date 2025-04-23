@@ -1,6 +1,6 @@
 package common
 
-class BoardManager(private val country: String, private var laps: Int = 0, private val players: List<Player>) {
+class BoardManager(private val country: String, private var laps: Int = 2, private val players: List<Player>) {
     private var ranking = players
 
     init {
@@ -10,15 +10,11 @@ class BoardManager(private val country: String, private var laps: Int = 0, priva
             "Italy" -> println("Italy not available.")
             "USA" -> println("USA not available.")
             "Japan" -> println("Japan not available.")
-            "Mexico" -> initializeBoard()
+            "Mexico" -> initializeBoardMexico(laps)
         }
     }
 
-    private fun initializeBoard() {
-        if (laps == 0) {
-            laps = 2
-        }
-
+    private fun initializeBoardMexico(laps: Int) {
         val mexicoSectors = listOf(
             Sector(order = 1, length = 22, cornerSpeed = 7, brakingArea = 9, start = 14),
             Sector(order = 2, length = 4, cornerSpeed = 7, brakingArea = 4),
