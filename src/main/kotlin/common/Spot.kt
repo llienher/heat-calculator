@@ -1,9 +1,10 @@
 package common
 
-data class Spot (
+data class Spot(
     var numSector: Int = -1,
     var type: SpotType = SpotType.LEGEND,
-    var boardPosition: Int = -1,
+    var trackIndex: Int = -1,
+    var boardLabel: Int = -1,
     var player: Player? = null,
 ) {
     fun isOccupied(): Boolean {

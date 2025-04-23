@@ -4,13 +4,13 @@ class Sector(
     private val order: Int,
     length: Int = 0,
     cornerSpeed: Int = 0,
-    brakingArea: Int = length,
+    legendArea: Int = length,
     start: Int? = null
 ) {
-    private val spaces = length + 1
+    private val spaces = length + 1 // it is board labels so 0 is counted, 7 length is 8 spaces
     private val spots: Int = Utils.fromNumberToSpot(spaces)
     private val speed = cornerSpeed // only for display
-    private val legendSpots = Utils.fromNumberToSpot((brakingArea + 1))
+    private val legendSpots = Utils.fromNumberToSpot((legendArea + 1))
     private val straightSpots: Int = spots - legendSpots;
     private var startSpot: Int? = null;
     private var finishSpot: Int? = null;
@@ -24,12 +24,21 @@ class Sector(
         }
     }
 
+    // array-like length
+    fun length(): Int {
+        return spaces - 1
+    }
+
     fun getOrder(): Int {
-        return this.order;
+        return this.order
     }
 
     fun getSpotsNumber(): Int {
-        return this.spots;
+        return this.spots
+    }
+
+    fun getSpacesNumber(): Int {
+        return this.spaces
     }
 
     fun getSpeed(): Int {
@@ -37,19 +46,19 @@ class Sector(
     }
 
     fun getLegendLength(): Int {
-        return this.legendSpots;
+        return this.legendSpots
     }
 
     fun getStartingPosition(): Int? {
-        return this.startSpot;
+        return this.startSpot
     }
 
     fun getFinishPosition(): Int? {
-        return this.finishSpot;
+        return this.finishSpot
     }
 
     fun getSpotsToCorner(): Int? {
-        return this.spotsToCorner;
+        return this.spotsToCorner
     }
 
     fun getStraightLength(): Int {
@@ -57,6 +66,6 @@ class Sector(
     }
 
     fun isChicane(): Boolean {
-        return this.straightSpots == 0;
+        return this.straightSpots == 0
     }
 }

@@ -10,5 +10,3 @@
 - spot: A place of the board where only one car can go
 - space: A tile of the board, composed of two spots (inner and outer spots)
 - move: A move of n spaces
-- moveCorner: The number that the IA need to be in the legend zone when the move exceed the corner that is reaching
-

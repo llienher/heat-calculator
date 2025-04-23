@@ -1,5 +1,7 @@
 package common
 
+import kotlin.math.floor
+
 class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sector>) {
     private val title = name.uppercase()
     private val totalLap = laps
@@ -27,7 +29,7 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
     }
 
     fun initTrack() {
-        var spotInitiated = 0
+        var indexPointer = 0
         for ((index, sector) in sectors.withIndex()) {
             // TODO: logic sector 1
             // track last segment: from starting line to 0
@@ -35,22 +37,26 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
 
             // TODO: logic sector 2+
             // track: from sector.size to 0
-            spotInitiated = this.assignSpots(sector, spotInitiated)
+            indexPointer = this.assignSpots(sector, indexPointer)
         }
     }
 
-    fun assignSpots(sector: Sector, spotCount: Int): Int {
-        var index = spotCount
-        val straightToSet = index + sector.getStraightLength()
-        val max = index + sector.getSpotsNumber()
+    fun assignSpots(sector: Sector, indexPointer: Int): Int {
+        var globalIndex = indexPointer
+        val straightToSet = globalIndex + sector.getStraightLength()
+        val max = globalIndex + sector.getSpotsNumber()
+        var sectorIndex = 0.0
 
         // Assign spot until end of the sector
-        while (index < max) {
-            val spot = this.track[index]
+        while (globalIndex < max) {
+            val spot = this.track[globalIndex]
             spot.numSector = sector.getOrder()
-            spot.type = if (index < straightToSet) SpotType.STRAIGHT else SpotType.LEGEND
-            spot.boardPosition = index
-            index++
+            spot.type = if (globalIndex < straightToSet) SpotType.STRAIGHT else SpotType.LEGEND
+            spot.trackIndex = globalIndex
+            val spacesAssigned = floor(sectorIndex / 2)
+            spot.boardLabel = sector.length() - spacesAssigned.toInt()
+            globalIndex++
+            sectorIndex++
         }
 
         return max
@@ -84,9 +90,44 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
         player.position = startingPosition
     }
 
-    fun movePlayerOnTrack(player: Player, move: Int) {
+    fun movePlayer(player: Player, move: Int, cornerPosition: Int = -1) {
+        if (player.type === PlayerType.NPC) {
+            if (cornerPosition == -1) {
+                throw Exception("Cannot move the NPC, no corner position is provided.")
+            }
+
+            // check where the NPC is after move
+            val currentPosition = player.position
+            val exceptedSlot = this.track[currentPosition + Utils.fromNumberToSpot(move)]
+            val exceptedSector = exceptedSlot.numSector
+            // TODO: check if move sector diff exceed two and there is chicane type in between
+
+
+            // if in legend zone
+            if (this.track[currentPosition].type === SpotType.LEGEND) {
+                movePlayerOnBoard(player, move)
+            } else {
+                // if passes the corner
+                if (exceptedSector > player.currentSector) {
+                    positionPlayerOnBoard(player, cornerPosition)
+                } else {
+                    movePlayerOnBoard(player, move)
+                }
+            }
+        } else {
+            // Move the User player
+            movePlayerOnBoard(player, move)
+        }
+    }
+
+    private fun movePlayerOnBoard(player: Player, move: Int) {
         val position = positionNearRaceLine(player.position)
         val newPosition = position + Utils.fromNumberToSpot(move)
+        addPlayerToSpot(player, newPosition)
+    }
+
+    private fun positionPlayerOnBoard(player: Player, position: Int) {
+        val newPosition = positionNearRaceLine(Utils.fromNumberToSpot(position))
         addPlayerToSpot(player, newPosition)
     }
 

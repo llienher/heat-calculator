@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
 class SectorTest {
-    private val testSector =  Sector(1, 3, 2, 1)
+    private val testSector = Sector(1, 3, 2, 1)
 
     @Test
     fun getOrder() {
@@ -16,6 +16,12 @@ class SectorTest {
     fun getSpotsNumber() {
         val excepted = 8
         assertEquals(excepted, testSector.getSpotsNumber())
+    }
+
+    @Test
+    fun getSpacesNumber() {
+        val excepted = 4
+        assertEquals(excepted, testSector.getSpacesNumber())
     }
 
     @Test
