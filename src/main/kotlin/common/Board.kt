@@ -120,12 +120,14 @@ class Board(name: String, laps: Int, spaces: Int, private val sectors: List<Sect
         }
     }
 
+    // Move the player (a card move for example)
     private fun movePlayerOnBoard(player: Player, move: Int) {
         val position = positionNearRaceLine(player.position)
         val newPosition = position + Utils.fromNumberToSpot(move)
         addPlayerToSpot(player, newPosition)
     }
 
+    // Position the player in the legend area (for IA only)
     private fun positionPlayerOnBoard(player: Player, position: Int) {
         val newPosition = positionNearRaceLine(Utils.fromNumberToSpot(position))
         addPlayerToSpot(player, newPosition)
