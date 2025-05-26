@@ -1,8 +1,8 @@
 package common
 
 class CardManager(players: List<Player>) {
-    var playersMoves: MutableList<PlayerMoveInfo> = ArrayList()
-    var possibleMoves: MutableList<PossiblePlayerMoveInfo> = ArrayList()
+    var possiblePlayerMoves: MutableList<PossiblePlayerMoveInfo> = ArrayList() // List of possible move for all players
+    var possibleCardMoves: MutableList<MoveInfo> = createMoveInfoList()
     var zoneQuotas = emptyList<Int>()
 
     // val allMoves: IntArray = (10..19).toIntArray()
@@ -16,29 +16,39 @@ class CardManager(players: List<Player>) {
         }
         // Set a list of usable moves for each player
         for (player in players) {
-            possibleMoves.add(PossiblePlayerMoveInfo(player.color, createMoveInfoList()))
+            possiblePlayerMoves.add(PossiblePlayerMoveInfo(player.color, createMoveInfoList()))
         }
     }
 
     fun createOnePlayerMove(color: PlayerColor): PlayerMoveInfo {
-        // Get the possible move list for this player
-        val possibilities = possibleMoves.find { it.color == color }
+        // Get the move list for this player
+        val possibilities = possiblePlayerMoves.find { it.color == color }
         if (possibilities === null) {
             throw Exception("Not possible to generate player move.")
         }
 
-        val randomNumber = (1..possibilities.possibleMoveInfo.size).random()
-        val move = PlayerMoveInfo(color, possibilities.possibleMoveInfo[randomNumber])
-        possibilities.possibleMoveInfo.removeAt(randomNumber)
+        // Get only the possible moves allowed to this player and this card
+        val thisPlayerMoves = possibilities.possibleMoveInfo
+        val intersectedMoves = possibleCardMoves.intersect(thisPlayerMoves).toList()
+
+        // Generate a move
+        val randomNumber = (1..intersectedMoves.size).random()
+        val move = PlayerMoveInfo(color, intersectedMoves[randomNumber])
+
+        // Remove used moves
+        thisPlayerMoves.remove(move.moveInfo)
+        possibleCardMoves.remove(move.moveInfo)
+
         return move
     }
 
     fun createOneCard(players: List<Player>): Card {
+        val cardMoves: MutableList<PlayerMoveInfo> = ArrayList() // Inside list of the card
         for (player in players) {
             val playerMove = createOnePlayerMove(player.color)
-            playersMoves.add(playerMove)
+            cardMoves.add(playerMove)
         }
-        return Card(playersMoves)
+        return Card(cardMoves)
     }
 
     fun createMoveInfoList(): ArrayList<MoveInfo> {
@@ -63,9 +73,7 @@ class CardManager(players: List<Player>) {
 
 data class Card(val moves: MutableList<PlayerMoveInfo>)
 
-data class MoveInfo(var zone: Int, var move: Int) {
-    companion object {} // For tests
-}
+data class MoveInfo(var zone: Int, var move: Int)
 
 data class PossiblePlayerMoveInfo(val color: PlayerColor, var possibleMoveInfo: MutableList<MoveInfo>)
 

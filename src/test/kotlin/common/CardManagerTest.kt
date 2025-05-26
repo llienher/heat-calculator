@@ -2,7 +2,6 @@ package common
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContains
 
 class CardManagerTest {
     private val player1 = Player(PlayerColor.RED, PlayerType.NPC)
@@ -38,8 +37,9 @@ class CardManagerTest {
     fun `Create a player move`() {
         val color = PlayerColor.RED
         val current = testCardManager.createOnePlayerMove(color)
-        val exceptedPossible = testCardManager.possibleMoves[0].possibleMoveInfo
+        val exceptedPossible = testCardManager.possiblePlayerMoves[0].possibleMoveInfo
         assertEquals(9, exceptedPossible.size)
         assert(current.moveInfo !in exceptedPossible)
+        assert(current.moveInfo !in testCardManager.possibleCardMoves)
     }
 }
