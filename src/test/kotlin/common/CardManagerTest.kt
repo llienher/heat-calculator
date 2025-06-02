@@ -17,13 +17,6 @@ class CardManagerTest {
     private val playersList = listOf(player1, player2, player3, player4, player5, player6, player7, player8)
     private val testCardManager = CardManager(playersList)
 
-
-    // @Test
-    // fun `Create a quota for 6 or less players`() {
-    //     val excepted: ArrayList<Int> = arrayListOf(2,3,3,2)
-    //     assertEquals(excepted, testCardManager.zoneQuotas)
-    // }
-
     @Test
     fun `Initialize CardManager correctly`() {
         val curCardPos = testCardManager.possibleCardMoves

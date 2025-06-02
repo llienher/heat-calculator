@@ -3,17 +3,8 @@ package common
 class CardManager(players: List<Player>) {
     var possiblePlayerMoves: MutableList<PossiblePlayerMoveInfo> = ArrayList() // List of possible move for all players
     var possibleCardMoves: MutableList<MoveInfo> = createMoveInfoList()
-    // var zoneQuotas = emptyList<Int>()
-    // val allMoves: IntArray = (10..19).toIntArray()
 
     init {
-        // Set the quotas related to the number of CPUs
-        // zoneQuotas = if (players.size <= 6) {
-        //     listOf(2, 3, 3, 2)
-        // } else {
-        //     listOf(2,4,4,2)
-        // }
-
         // Set a list of usable moves for each player
         for (player in players) {
             possiblePlayerMoves.add(PossiblePlayerMoveInfo(player.color, createMoveInfoList()))
